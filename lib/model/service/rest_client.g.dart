@@ -10,7 +10,7 @@ part of 'rest_client.dart';
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://randomuser.me/';
+    baseUrl ??= 'https://dummyjson.com/products/category/';
   }
 
   final Dio _dio;
@@ -20,9 +20,9 @@ class _RestClient implements RestClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ListUser> apiKey(String apiKey) async {
+  Future<ListUser> apiKey(String results) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'results': apiKey};
+    final queryParameters = <String, dynamic>{r'results': results};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ListUser>(
@@ -39,6 +39,33 @@ class _RestClient implements RestClient {
     late ListUser _value;
     try {
       _value = ListUser.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ListLaptops> getListLaptop() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ListLaptops>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'laptops',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ListLaptops _value;
+    try {
+      _value = ListLaptops.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

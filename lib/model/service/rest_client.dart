@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:janeanan/model/api/apis.dart';
+import 'package:janeanan/model/list_laptop.dart';
 import 'package:janeanan/model/list_user.dart';
 import 'package:retrofit/retrofit.dart';
 part 'rest_client.g.dart';
@@ -11,6 +12,10 @@ abstract class RestClient {
 
   @GET(Apis.api)
   Future<ListUser> apiKey(
-    @Query('results') String apiKey,
+    @Query('results') String results,
+  );
+  
+  @GET(Apis.laptops)
+  Future<ListLaptops> getListLaptop(
   );
 }
